@@ -1,5 +1,33 @@
 <?php
 session_start();
+
+if (isset($_SESSION['username'])) {
+    header("Location: game.php");
+    exit();
+}
+
+require_once 'functions.php';
+
+$error = "";
+$success = "";
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $username = trim($_POST['username'] ?? '');
+    $password = $_POST['password'] ?? '';
+    $confirm  = $_POST['confirm_password'] ?? '';
+
+    if ($password !== $confirm) {
+        $error = "Passwords do not match.";
+    } else {
+        $result = registerUser($username, $password);
+        if ($result === true) {
+            $success = "Account created! <a href='login.php'>Login here</a>";
+        } else {
+            $error = $result; 
+        }
+    }
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -14,7 +42,7 @@ session_start();
         <h1>Adventures of the Dice</h1>
         <h2>Register</h2>
 
-        <form action="#" method="post">
+        <form action="register.php" method="post">
             <label for="new-username">Username</label>
             <input type="text" id="new-username" name="username">
 
