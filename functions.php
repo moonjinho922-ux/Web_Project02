@@ -1,8 +1,8 @@
 <?php
 // testing phase - hard code
 $users = [
-    "player1" => password_hash("123", PASSWORD_DEFAULT),
-    "player2" => password_hash("456", PASSWORD_DEFAULT),
+    "test1" => password_hash("123", PASSWORD_DEFAULT),
+    "test2" => password_hash("456", PASSWORD_DEFAULT),
 ];
 
 function getUserByUsername($username) {
