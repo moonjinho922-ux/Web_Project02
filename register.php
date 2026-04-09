@@ -1,4 +1,5 @@
 <?php
+// doesn't work yet - still testing
 session_start();
 
 if (isset($_SESSION['username'])) {

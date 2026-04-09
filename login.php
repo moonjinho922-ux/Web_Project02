@@ -1,6 +1,6 @@
 <?php
 session_start();
-// note - still need to fix functions.php in order for this to work
+// note - still need to fix functions.php for this to work
 if (isset($_SESSION['username'])) {
     header("Location: game.php");
     exit();
