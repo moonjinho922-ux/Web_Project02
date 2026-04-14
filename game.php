@@ -1,5 +1,41 @@
 <?php
 session_start();
+require_once "functions.php";
+
+if (!isset($_SESSION["user"])) {
+    header("Location: login.php");
+    exit();
+}
+
+if (!isset($_SESSION["p1"])) {
+    header("Location: start.php");
+    exit();
+}
+
+$dice = "-";
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $dice = rollDice();
+
+    if ($_SESSION["turn"] == 1) {
+        $_SESSION["p1"] += $dice;
+        $_SESSION["turn"] = 2;
+    } else {
+        $_SESSION["p2"] += $dice;
+        $_SESSION["turn"] = 1;
+    }
+
+    // Win condition
+    if ($_SESSION["p1"] >= 100) {
+        echo "<h2>Player 1 Wins!</h2>";
+        session_destroy();
+    }
+
+    if ($_SESSION["p2"] >= 100) {
+        echo "<h2>Player 2 Wins!</h2>";
+        session_destroy();
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
