@@ -2,15 +2,7 @@
 session_start();
 require_once "functions.php";
 
-if (!isset($_SESSION["user"])) {
-    header("Location: login.php");
-    exit();
-}
-
-if (!isset($_SESSION["p1"])) {
-    header("Location: start.php");
-    exit();
-}
+// still errors :/
 
 $dice = "-";
 
