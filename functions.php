@@ -62,6 +62,28 @@ function rollDice() {
     return rand(1, 6);
 }
 
+// Snakes by difficulty: key = head (where you land), value = tail (where you slide to)
+function getSnakesByDifficulty($difficulty) {
+    if ($difficulty === "easy") {
+        return [17 => 7, 54 => 34];
+    } elseif ($difficulty === "hard") {
+        return [17 => 7, 54 => 34, 62 => 19, 64 => 60, 87 => 24, 93 => 73, 95 => 75, 99 => 78];
+    } else { // medium
+        return [17 => 7, 54 => 34, 62 => 19, 64 => 60, 87 => 24];
+    }
+}
+
+// Ladders by difficulty: key = bottom (where you land), value = top (where you climb to)
+function getLaddersByDifficulty($difficulty) {
+    if ($difficulty === "easy") {
+        return [4 => 14, 9 => 31, 20 => 38, 28 => 84, 40 => 59, 51 => 67, 63 => 81, 71 => 91];
+    } elseif ($difficulty === "hard") {
+        return [4 => 14, 9 => 31];
+    } else { // medium
+        return [4 => 14, 9 => 31, 20 => 38, 28 => 84, 40 => 59];
+    }
+}
+
 // Initialize game
 function initGame($difficulty) {
     $_SESSION["p1"] = 0;
