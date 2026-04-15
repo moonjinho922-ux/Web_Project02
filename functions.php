@@ -1,25 +1,41 @@
 <?php
-// Simple database using JSON file
+// Load all users from users.json
 function loadUsers() {
     if (!file_exists("users.json")) {
-        file_put_contents("users.json", json_encode([]));
+        file_put_contents("users.json", json_encode([], JSON_PRETTY_PRINT));
     }
-    return json_decode(file_get_contents("users.json"), true);
+    $data = json_decode(file_get_contents("users.json"), true);
+    return is_array($data) ? $data : [];
 }
 
 function saveUsers($users) {
     file_put_contents("users.json", json_encode($users, JSON_PRETTY_PRINT));
 }
 
+// Find a user by username
+function getUserByUsername($username) {
+    $users = loadUsers();
+    foreach ($users as $user) {
+        if ($user["username"] === $username) {
+            return $user;
+        }
+    }
+    return false;
+}
+
 // Register user
 function registerUser($username, $password) {
-    $users = loadUsers();
+    $username = trim($username);
 
-    if (isset($users[$username])) {
+    if (getUserByUsername($username)) {
         return "Username already exists!";
     }
 
-    $users[$username] = password_hash($password, PASSWORD_DEFAULT);
+    $users = loadUsers();
+    $users[] = [
+        "username" => $username,
+        "password" => password_hash($password, PASSWORD_DEFAULT)
+    ];
     saveUsers($users);
 
     return true;
@@ -27,14 +43,14 @@ function registerUser($username, $password) {
 
 // Login user
 function loginUser($username, $password) {
-    $users = loadUsers();
+    $user = getUserByUsername(trim($username));
 
-    if (!isset($users[$username])) {
+    if (!$user) {
         return false;
     }
 
-    if (password_verify($password, $users[$username])) {
-        $_SESSION["username"] = $username;
+    if (password_verify($password, $user["password"])) {
+        $_SESSION["username"] = $user["username"];
         return true;
     }
 
