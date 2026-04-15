@@ -92,6 +92,7 @@ function initGame($difficulty) {
     $_SESSION["difficulty"] = $difficulty;
     $_SESSION["winner"] = null;
     $_SESSION["history"] = [];
+    $_SESSION["start_time"] = time();
 }
 
 // Load leaderboard

@@ -22,6 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <body>
 <div class="container center-box">
     <h1>Adventures of the Dice</h1>
+    <p>Welcome, <strong><?php echo htmlspecialchars($_SESSION["username"]); ?></strong>!</p>
 
     <form method="post">
         <select name="difficulty">
@@ -29,8 +30,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <option value="medium">Medium</option>
             <option value="hard">Hard</option>
         </select>
-        <button type="submit">Start</button>
+        <button type="submit">Start Game</button>
     </form>
+
+    <div class="button-group">
+        <a href="leaderboard.php" class="btn-link">Leaderboard</a>
+        <a href="logout.php" class="btn-link">Logout</a>
+    </div>
 </div>
 </body>
 </html>
