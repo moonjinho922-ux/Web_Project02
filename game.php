@@ -23,16 +23,23 @@ $dice = "-";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && !$_SESSION["winner"]) {
     $dice = rollDice();
+    $difficulty = $_SESSION["difficulty"];
+    $snakes  = getSnakesByDifficulty($difficulty);
+    $ladders = getLaddersByDifficulty($difficulty);
 
     if ($_SESSION["turn"] == 1) {
         $_SESSION["p1"] += $dice;
+        if (isset($snakes[$_SESSION["p1"]]))  $_SESSION["p1"] = $snakes[$_SESSION["p1"]];
+        if (isset($ladders[$_SESSION["p1"]])) $_SESSION["p1"] = $ladders[$_SESSION["p1"]];
         $_SESSION["turn"] = 2;
     } else {
         $_SESSION["p2"] += $dice;
+        if (isset($snakes[$_SESSION["p2"]]))  $_SESSION["p2"] = $snakes[$_SESSION["p2"]];
+        if (isset($ladders[$_SESSION["p2"]])) $_SESSION["p2"] = $ladders[$_SESSION["p2"]];
         $_SESSION["turn"] = 1;
     }
 
-    // Win check and save to leaderboard 
+    // Win check and save to leaderboard
     if ($_SESSION["p1"] >= 100 && !$_SESSION["winner"]) {
         $_SESSION["winner"] = "Player 1";
         addToLeaderboard($_SESSION["username"], $_SESSION["p1"]);
