@@ -1,62 +1,45 @@
 <?php
-// doesn't work yet - still testing
 session_start();
-
-if (isset($_SESSION['username'])) {
-    header("Location: game.php");
-    exit();
-}
-
 require_once 'functions.php';
 
-$error = "";
-$success = "";
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = trim($_POST['username'] ?? '');
-    $password = $_POST['password'] ?? '';
-    $confirm  = $_POST['confirm_password'] ?? '';
-
-    if ($password !== $confirm) {
-        $error = "Passwords do not match.";
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if ($_POST["password"] !== $_POST["confirm_password"]) {
+        $error = "Passwords do not match!";
     } else {
-        $result = registerUser($username, $password);
+        $result = registerUser($_POST["username"], $_POST["password"]);
+
         if ($result === true) {
-            $success = "Account created! <a href='login.php'>Login here</a>";
+            header("Location: login.php");
+            exit();
         } else {
-            $error = $result; 
+            $error = $result;
         }
     }
 }
-
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register | Adventures of the Dice</title>
+    <title>Register</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container auth-box">
-        <h1>Adventures of the Dice</h1>
-        <h2>Register</h2>
+<div class="container auth-box">
+    <h1>Adventures of the Dice</h1>
+    <h2>Register</h2>
 
-        <form action="register.php" method="post">
-            <label for="new-username">Username</label>
-            <input type="text" id="new-username" name="username">
+    <?php if (!empty($error)) echo "<p>$error</p>"; ?>
 
-            <label for="new-password">Password</label>
-            <input type="password" id="new-password" name="password">
+    <form method="post">
+        <input type="text" name="username" placeholder="Username" required>
+        <input type="password" name="password" placeholder="Password" required>
+        <input type="password" name="confirm_password" placeholder="Confirm Password" required>
+        <button type="submit">Register</button>
+    </form>
 
-            <label for="confirm-password">Confirm Password</label>
-            <input type="password" id="confirm-password" name="confirm_password">
-
-            <button type="submit">Register</button>
-        </form>
-
-        <p class="link-text">Already have an account? <a href="login.php">Login here</a></p>
-    </div>
+    <p class="link-text">
+        <a href="login.php">Login</a>
+    </p>
+</div>
 </body>
 </html>

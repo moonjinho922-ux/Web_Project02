@@ -1,41 +1,44 @@
 <?php
 session_start();
+require_once "functions.php";
+
+$board = loadLeaderboard();
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Leaderboard | Adventures of the Dice</title>
+    <title>Leaderboard</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Adventures of the Dice</h1>
-        <h2>Leaderboard</h2>
+<div class="container">
+    <h1>Leaderboard</h1>
 
-        <table>
-            <tr>
-                <th>Rank</th>
-                <th>Username</th>
-                <th>Score</th>
-            </tr>
-            <tr>
-                <td>1</td>
-                <td>Player1</td>
-                <td>100</td>
-            </tr>
-            <tr>
-                <td>2</td>
-                <td>Player2</td>
-                <td>80</td>
-            </tr>
-        </table>
+    <table>
+        <tr>
+            <th>Rank</th>
+            <th>Username</th>
+            <th>Score</th>
+        </tr>
 
-        <div class="button-group">
-            <a href="start.php" class="btn-link">Back to Start</a>
-            <a href="game.php" class="btn-link">Back to Game</a>
-        </div>
+        <?php if (empty($board)): ?>
+            <tr><td colspan="3">No scores yet</td></tr>
+        <?php else: ?>
+            <?php $rank = 1; ?>
+            <?php foreach ($board as $player): ?>
+                <tr>
+                    <td><?php echo $rank++; ?></td>
+                    <td><?php echo htmlspecialchars($player["username"]); ?></td>
+                    <td><?php echo $player["score"]; ?></td>
+                </tr>
+            <?php endforeach; ?>
+        <?php endif; ?>
+    </table>
+
+    <div class="button-group">
+        <a href="start.php" class="btn-link">Play Again</a>
+        <a href="game.php" class="btn-link">Back to Game</a>
     </div>
+</div>
 </body>
 </html>
