@@ -34,7 +34,7 @@ function loginUser($username, $password) {
     }
 
     if (password_verify($password, $users[$username])) {
-        $_SESSION["user"] = $username;
+        $_SESSION["username"] = $username;
         return true;
     }
 
