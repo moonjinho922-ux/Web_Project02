@@ -31,11 +31,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !$_SESSION["winner"]) {
         $_SESSION["p1"] += $dice;
         if (isset($snakes[$_SESSION["p1"]]))  $_SESSION["p1"] = $snakes[$_SESSION["p1"]];
         if (isset($ladders[$_SESSION["p1"]])) $_SESSION["p1"] = $ladders[$_SESSION["p1"]];
+        $_SESSION["history"][] = ["player" => "Player 1", "roll" => $dice];
         $_SESSION["turn"] = 2;
     } else {
         $_SESSION["p2"] += $dice;
         if (isset($snakes[$_SESSION["p2"]]))  $_SESSION["p2"] = $snakes[$_SESSION["p2"]];
         if (isset($ladders[$_SESSION["p2"]])) $_SESSION["p2"] = $ladders[$_SESSION["p2"]];
+        $_SESSION["history"][] = ["player" => "Player 2", "roll" => $dice];
         $_SESSION["turn"] = 1;
     }
 

@@ -91,6 +91,7 @@ function initGame($difficulty) {
     $_SESSION["turn"] = 1;
     $_SESSION["difficulty"] = $difficulty;
     $_SESSION["winner"] = null;
+    $_SESSION["history"] = [];
 }
 
 // Load leaderboard
