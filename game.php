@@ -3,7 +3,7 @@ session_start();
 require_once "functions.php";
 
 // Redirect if not logged in
-if (!isset($_SESSION["user"])) {
+if (!isset($_SESSION["username"])) {
     header("Location: login.php");
     exit();
 }
@@ -35,12 +35,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !$_SESSION["winner"]) {
     // Win check and save to leaderboard 
     if ($_SESSION["p1"] >= 100 && !$_SESSION["winner"]) {
         $_SESSION["winner"] = "Player 1";
-        addToLeaderboard($_SESSION["user"], $_SESSION["p1"]);
+        addToLeaderboard($_SESSION["username"], $_SESSION["p1"]);
     }
 
     if ($_SESSION["p2"] >= 100 && !$_SESSION["winner"]) {
         $_SESSION["winner"] = "Player 2";
-        addToLeaderboard($_SESSION["user"], $_SESSION["p2"]);
+        addToLeaderboard($_SESSION["username"], $_SESSION["p2"]);
     }
 }
 ?>
