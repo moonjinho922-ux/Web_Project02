@@ -1,14 +1,20 @@
 <?php
-// Simple database using JSON file
+// Load users
 function loadUsers() {
-    if (!file_exists("users.json")) {
-        file_put_contents("users.json", json_encode([]));
+    $file = __DIR__ . "/users.json";
+
+    if (!file_exists($file)) {
+        // create as OBJECT (important)
+        file_put_contents($file, json_encode(new stdClass()));
     }
-    return json_decode(file_get_contents("users.json"), true);
+
+    return json_decode(file_get_contents($file), true);
 }
 
+// Save users
 function saveUsers($users) {
-    file_put_contents("users.json", json_encode($users, JSON_PRETTY_PRINT));
+    $file = __DIR__ . "/users.json";
+    file_put_contents($file, json_encode($users));
 }
 
 // Register user
@@ -41,6 +47,8 @@ function loginUser($username, $password) {
     return false;
 }
 
+
+// Game Logic
 // Roll dice
 function rollDice() {
     return rand(1, 6);
@@ -53,22 +61,30 @@ function initGame($difficulty) {
     $_SESSION["turn"] = 1;
     $_SESSION["difficulty"] = $difficulty;
     $_SESSION["winner"] = null;
+    $_SESSION["start_time"] = time();
 }
+
+
+
 
 // Load leaderboard
 function loadLeaderboard() {
-    if (!file_exists("leaderboard.json")) {
-        file_put_contents("leaderboard.json", json_encode([]));
+    $file = __DIR__ . "/leaderboard.json";
+
+    if (!file_exists($file)) {
+        file_put_contents($file, json_encode([]));
     }
-    return json_decode(file_get_contents("leaderboard.json"), true);
+
+    return json_decode(file_get_contents($file), true);
 }
 
 // Save leaderboard
 function saveLeaderboard($data) {
-    file_put_contents("leaderboard.json", json_encode($data, JSON_PRETTY_PRINT));
+    $file = __DIR__ . "/leaderboard.json";
+    file_put_contents($file, json_encode($data));
 }
 
-// Add winner to leaderboard
+// Add winner
 function addToLeaderboard($username, $score) {
     $board = loadLeaderboard();
 
@@ -86,6 +102,69 @@ function addToLeaderboard($username, $score) {
 }
 
 
+// Snakes and Ladders
+
+function getBoardConfig($difficulty) {
+    // easy
+    if ($difficulty == "easy") {
+        return [
+            "snakes" => [
+                17 => 7,
+                54 => 34,
+                62 => 19
+            ],
+            "ladders" => [
+                3 => 22,
+                11 => 26,
+                20 => 38
+            ]
+        ];
+    }
+
+    // medium
+    if ($difficulty == "medium") {
+        return [
+            "snakes" => [
+                17 => 7,
+                54 => 34,
+                62 => 19,
+                87 => 24,
+                95 => 56
+            ],
+            "ladders" => [
+                3 => 22,
+                11 => 26,
+                20 => 38,
+                28 => 55,
+                40 => 59
+            ]
+        ];
+    }
+
+    // hard
+    return [
+        "snakes" => [
+            17 => 7,
+            54 => 34,
+            62 => 19,
+            87 => 24,
+            95 => 56,
+            99 => 78,
+            73 => 52,
+            48 => 9,
+            66 => 45
+        ],
+        "ladders" => [
+            3 => 22,
+            11 => 26,
+            20 => 38,
+            28 => 55,
+            40 => 59,
+            50 => 72,
+            64 => 83,
+            70 => 91,
+            80 => 98
+        ]
+    ];
+}
 ?>
-
-
