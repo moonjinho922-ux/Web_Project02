@@ -2,54 +2,58 @@
 session_start();
 require_once "functions.php";
 
-// Redirect if not logged in
-if (!isset($_SESSION["username"])) {
+if (!isset($_SESSION["user"])) {
     header("Location: login.php");
     exit();
 }
 
-// Redirect if game not started
 if (!isset($_SESSION["p1"])) {
     header("Location: start.php");
     exit();
 }
 
-// Prevent undefined errors
 if (!isset($_SESSION["winner"])) {
     $_SESSION["winner"] = null;
 }
 
+$config = getBoardConfig($_SESSION["difficulty"]);
+
 $dice = "-";
 
+function applySnakesLadders($pos, $config) {
+    if (isset($config["snakes"][$pos])) {
+        return $config["snakes"][$pos];
+    }
+    if (isset($config["ladders"][$pos])) {
+        return $config["ladders"][$pos];
+    }
+    return $pos;
+}
+
 if ($_SERVER["REQUEST_METHOD"] == "POST" && !$_SESSION["winner"]) {
-    $dice = rollDice();
-    $difficulty = $_SESSION["difficulty"];
-    $snakes  = getSnakesByDifficulty($difficulty);
-    $ladders = getLaddersByDifficulty($difficulty);
+    $dice = rand(1, 6);
 
     if ($_SESSION["turn"] == 1) {
         $_SESSION["p1"] += $dice;
-        if (isset($snakes[$_SESSION["p1"]]))  $_SESSION["p1"] = $snakes[$_SESSION["p1"]];
-        if (isset($ladders[$_SESSION["p1"]])) $_SESSION["p1"] = $ladders[$_SESSION["p1"]];
-        $_SESSION["history"][] = ["player" => "Player 1", "roll" => $dice];
+        $_SESSION["p1"] = applySnakesLadders($_SESSION["p1"], $config);
         $_SESSION["turn"] = 2;
     } else {
         $_SESSION["p2"] += $dice;
-        if (isset($snakes[$_SESSION["p2"]]))  $_SESSION["p2"] = $snakes[$_SESSION["p2"]];
-        if (isset($ladders[$_SESSION["p2"]])) $_SESSION["p2"] = $ladders[$_SESSION["p2"]];
-        $_SESSION["history"][] = ["player" => "Player 2", "roll" => $dice];
+        $_SESSION["p2"] = applySnakesLadders($_SESSION["p2"], $config);
         $_SESSION["turn"] = 1;
     }
 
-    // Win check and save to leaderboard
+    // Win check
     if ($_SESSION["p1"] >= 100 && !$_SESSION["winner"]) {
         $_SESSION["winner"] = "Player 1";
-        addToLeaderboard($_SESSION["username"], $_SESSION["p1"]);
+        $timePlayed = time() - $_SESSION["start_time"];
+        addToLeaderboard($_SESSION["user"], $_SESSION["p1"]);
     }
 
     if ($_SESSION["p2"] >= 100 && !$_SESSION["winner"]) {
         $_SESSION["winner"] = "Player 2";
-        addToLeaderboard($_SESSION["username"], $_SESSION["p2"]);
+        $timePlayed = time() - $_SESSION["start_time"];
+        addToLeaderboard($_SESSION["user"], $_SESSION["p2"]);
     }
 }
 ?>
@@ -57,53 +61,77 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !$_SESSION["winner"]) {
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Game | Adventures of the Dice</title>
+    <title>Snakes & Ladders Game</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="container">
-    
-    <div class="top-bar">
-        <h1>Adventures of the Dice</h1>
-        <a href="logout.php" class="small-link">Logout</a>
-    </div>
+    <div class="container">
 
-    <h2>Game Board</h2>
+        <div class="top-bar">
+            <h1>Snakes & Ladders</h1>
+            <a href="logout.php" class="small-link">Logout</a>
+        </div>
 
-    <div class="game-layout">
-        
-        <!-- Baord -->
-        <div class="board">
+        <h3>Difficulty: <?php echo $_SESSION["difficulty"]; ?></h3>
+
+        <div class="game-layout">
+
+            <!-- board -->
+            <div class="board">
+
             <?php for ($i = 100; $i >= 1; $i--): ?>
-                <div class="cell"><?php echo $i; ?></div>
-            <?php endfor; ?>
-        </div>
+                <div class="cell">
 
-        <!-- Game Panel -->
-        <div class="game-panel">
-            <p><strong>Turn:</strong> Player <?php echo $_SESSION["turn"]; ?></p>
-            <p><strong>Dice:</strong> <?php echo $dice; ?></p>
-            <p><strong>Player 1 Position:</strong> <?php echo $_SESSION["p1"]; ?></p>
-            <p><strong>Player 2 Position:</strong> <?php echo $_SESSION["p2"]; ?></p>
+                    <?php echo $i; ?>
 
-            <?php if (!$_SESSION["winner"]): ?>
-                <form method="post">
-                    <button type="submit">Roll Dice</button>
-                </form>
-            <?php else: ?>
-                <h3><?php echo $_SESSION["winner"]; ?> Wins!</h3>
+                    <!-- tokens -->
+                    <?php if ($_SESSION["p1"] == $i && $_SESSION["p2"] == $i): ?>
+                        <div class="player p1 overlap"></div>
+                        <div class="player p2 overlap"></div>
 
-                <div class="button-group">
-                    <a href="start.php" class="btn-link">Play Again</a>
-                    <a href="leaderboard.php" class="btn-link">View Leaderboard</a>
+                    <?php elseif ($_SESSION["p1"] == $i): ?>
+                        <div class="player p1"></div>
+
+                    <?php elseif ($_SESSION["p2"] == $i): ?>
+                        <div class="player p2"></div>
+                    <?php endif; ?>
+
+                    <!-- visual markers -->
+                    <?php if (isset($config["snakes"][$i])): ?>
+                        <div class="snake">Snake</div>
+                    <?php endif; ?>
+
+                    <?php if (isset($config["ladders"][$i])): ?>
+                        <div class="ladder">Ladder</div>
+                    <?php endif; ?>
+
                 </div>
-            <?php endif; ?>
+            <?php endfor; ?>
 
-            <br>
-            <!-- <a href="leaderboard.php" class="btn-link">Leaderboard</a> -->
+            </div>
+
+            <!-- panel -->
+            <div class="game-panel">
+                <p>Turn: Player <?php echo $_SESSION["turn"]; ?></p>
+                <p>Dice: <?php echo $dice; ?></p>
+
+                <p>P1: <?php echo $_SESSION["p1"]; ?></p>
+                <p>P2: <?php echo $_SESSION["p2"]; ?></p>
+
+                <?php if (!$_SESSION["winner"]): ?>
+                    <form method="post">
+                        <button type="submit">Roll Dice</button>
+                    </form>
+                <?php else: ?>
+                    <h2><?php echo $_SESSION["winner"]; ?> Wins!</h2>
+
+                    <div class="button-group">
+                        <a href="start.php" class="btn-link">Play Again</a>
+                        <a href="leaderboard.php" class="btn-link">Leaderboard</a>
+                    </div>
+                <?php endif; ?>
+            </div>
         </div>
-
     </div>
-</div>
 </body>
 </html>

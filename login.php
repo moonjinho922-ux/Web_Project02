@@ -11,6 +11,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 ?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -18,21 +19,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="container auth-box">
-    <h1>Adventures of the Dice</h1>
-    <h2>Login</h2>
+    <div class="container auth-box">
+        <h1>Adventures of the Dice</h1>
+        <h2>Login</h2>
 
-    <?php if (!empty($error)) echo "<p>$error</p>"; ?>
+        <?php if (!empty($error)) echo "<p>$error</p>"; ?>
 
-    <form method="post">
-        <input type="text" name="username" placeholder="Username" required>
-        <input type="password" name="password" placeholder="Password" required>
-        <button type="submit">Login</button>
-    </form>
+        <form method="post">
+            <input type="text" name="username" placeholder="Username" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <button type="submit">Login</button>
+        </form>
 
-    <p class="link-text">
-        <a href="register.php">Register</a>
-    </p>
-</div>
+        <p class="link-text">
+            <a href="register.php">Register</a>
+        </p>
+    </div>
 </body>
 </html>
