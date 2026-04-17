@@ -104,6 +104,18 @@ function addToLeaderboard($username, $rolls) {
 }
 
 
+// Event cells
+function getEventCells() {
+    return [
+        15 => ["type" => "bonus", "move" => 5,  "msg" => "Found a shortcut!"],
+        30 => ["type" => "penalty", "move" => -4, "msg" => "Lost your map!"],
+        42 => ["type" => "warp",  "move" => 8,  "msg" => "Magic portal!"],
+        58 => ["type" => "bonus", "move" => 3,  "msg" => "Tailwind boost!"],
+        75 => ["type" => "penalty", "move" => -6, "msg" => "Caught in a trap!"]
+    ];
+}
+
+
 // Snakes and Ladders
 
 function getBoardConfig($difficulty) {
