@@ -47,7 +47,6 @@ function loginUser($username, $password) {
     return false;
 }
 
-
 // Game Logic
 // Roll dice
 function rollDice() {
@@ -64,9 +63,6 @@ function initGame($difficulty) {
     $_SESSION["start_time"] = time();
     $_SESSION["rolls"] = 0;
 }
-
-
-
 
 // Load leaderboard
 function loadLeaderboard() {
@@ -103,7 +99,6 @@ function addToLeaderboard($username, $rolls) {
     saveLeaderboard($board);
 }
 
-
 // Event cells
 function getEventCells() {
     return [
@@ -115,9 +110,30 @@ function getEventCells() {
     ];
 }
 
+// Apply event to position
+function applyEvent($event) {
+    if ($_SESSION["turn"] == 2) {
+        $_SESSION["p1"] += $event["move"];
+    } else {
+        $_SESSION["p2"] += $event["move"];
+    }
+}
+
+// Return a story message for the event
+function narrateEvent($event, $playerName, $cell) {
+    if ($event["type"] == "bonus") {
+        return "$playerName landed on cell $cell - " . $event["msg"] . " Move forward " . $event["move"] . "!";
+    }
+    if ($event["type"] == "penalty") {
+        return "$playerName landed on cell $cell - " . $event["msg"] . " Move back " . abs($event["move"]) . "!";
+    }
+    if ($event["type"] == "warp") {
+        return "$playerName landed on cell $cell - " . $event["msg"] . " Warped forward " . $event["move"] . "!";
+    }
+    return "$playerName landed on cell $cell - " . $event["msg"];
+}
 
 // Snakes and Ladders
-
 function getBoardConfig($difficulty) {
     // easy
     if ($difficulty == "easy") {
