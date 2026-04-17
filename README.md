@@ -39,4 +39,8 @@ Adventures of the Dice is a Snakes and Ladders style board game built with PHP, 
 | Jinho Moon | 900881415 | Game logic, snakes & ladders, session management, AI narrator |
 | Trinh Bui | 002681387 | Login/registration, leaderboard, CSS styling |
 
+## AI Usage
+We used AI assistance to help design the AI Narrator event system in `functions.php`. Specifically, we struggled with how to structure the `$event_cells` array, how to apply the move to the correct player's session position, and how to make sure `narrateEvent()` reported the cell where the player landed rather than where they ended up after the event.
+
 ## GSU Codd Server Link
+https://codd.cs.gsu.edu/~jmoon24/Web/pw/02/login.php
