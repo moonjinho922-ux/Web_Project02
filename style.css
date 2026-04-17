@@ -183,6 +183,29 @@ th {
     font-size: 10px;
 }
 
+.recap-box {
+    background-color: #f0fdf4;
+    border-left: 4px solid #16a34a;
+    padding: 10px;
+    margin-top: 12px;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+.recap-box ul {
+    margin: 8px 0 0 0;
+    padding-left: 18px;
+}
+
+.narrator-box {
+    background-color: #ede9fe;
+    border-left: 4px solid #4f46e5;
+    padding: 10px;
+    margin-top: 12px;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
 /* media */
 @media (max-width: 768px) {
     .container {

@@ -62,6 +62,8 @@ function initGame($difficulty) {
     $_SESSION["winner"] = null;
     $_SESSION["start_time"] = time();
     $_SESSION["rolls"] = 0;
+    $_SESSION["last_event"] = "";
+    $_SESSION["events_log"] = [];
 }
 
 // Load leaderboard
