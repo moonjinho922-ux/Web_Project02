@@ -43,8 +43,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !$_SESSION["winner"]) {
 
         if (isset($events[$_SESSION["p1"]])) {
             $event = $events[$_SESSION["p1"]];
+            $landedCell = $_SESSION["p1"];
             applyEvent($event);
-            $msg = narrateEvent($event, "Player 1", $_SESSION["p1"]);
+            $_SESSION["p1"] = max(1, $_SESSION["p1"]);
+            $msg = narrateEvent($event, "Player 1", $landedCell);
             $_SESSION["last_event"] = $msg;
             $_SESSION["events_log"][] = $msg;
         }
@@ -55,8 +57,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !$_SESSION["winner"]) {
 
         if (isset($events[$_SESSION["p2"]])) {
             $event = $events[$_SESSION["p2"]];
+            $landedCell = $_SESSION["p2"];
             applyEvent($event);
-            $msg = narrateEvent($event, "Player 2", $_SESSION["p2"]);
+            $_SESSION["p2"] = max(1, $_SESSION["p2"]);
+            $msg = narrateEvent($event, "Player 2", $landedCell);
             $_SESSION["last_event"] = $msg;
             $_SESSION["events_log"][] = $msg;
         }
