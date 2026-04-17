@@ -32,6 +32,7 @@ function applySnakesLadders($pos, $config) {
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && !$_SESSION["winner"]) {
     $dice = rand(1, 6);
+    $_SESSION["rolls"]++;
 
     if ($_SESSION["turn"] == 1) {
         $_SESSION["p1"] += $dice;
@@ -46,14 +47,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !$_SESSION["winner"]) {
     // Win check
     if ($_SESSION["p1"] >= 100 && !$_SESSION["winner"]) {
         $_SESSION["winner"] = "Player 1";
-        $timePlayed = time() - $_SESSION["start_time"];
-        addToLeaderboard($_SESSION["user"], $_SESSION["p1"]);
+        addToLeaderboard($_SESSION["user"], $_SESSION["rolls"]);
     }
 
     if ($_SESSION["p2"] >= 100 && !$_SESSION["winner"]) {
         $_SESSION["winner"] = "Player 2";
-        $timePlayed = time() - $_SESSION["start_time"];
-        addToLeaderboard($_SESSION["user"], $_SESSION["p2"]);
+        addToLeaderboard($_SESSION["user"], $_SESSION["rolls"]);
     }
 }
 ?>
@@ -114,6 +113,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !$_SESSION["winner"]) {
             <div class="game-panel">
                 <p>Turn: Player <?php echo $_SESSION["turn"]; ?></p>
                 <p>Dice: <?php echo $dice; ?></p>
+                <p>Rolls: <?php echo $_SESSION["rolls"]; ?></p>
 
                 <p>P1: <?php echo $_SESSION["p1"]; ?></p>
                 <p>P2: <?php echo $_SESSION["p2"]; ?></p>

@@ -62,6 +62,7 @@ function initGame($difficulty) {
     $_SESSION["difficulty"] = $difficulty;
     $_SESSION["winner"] = null;
     $_SESSION["start_time"] = time();
+    $_SESSION["rolls"] = 0;
 }
 
 
@@ -85,17 +86,18 @@ function saveLeaderboard($data) {
 }
 
 // Add winner
-function addToLeaderboard($username, $score) {
+function addToLeaderboard($username, $rolls) {
     $board = loadLeaderboard();
 
     $board[] = [
         "username" => $username,
-        "score" => $score
+        "rolls" => $rolls,
+        "result" => "win"
     ];
 
-    // sort highest score first
+    // sort fewest rolls first
     usort($board, function($a, $b) {
-        return $b["score"] - $a["score"];
+        return $a["rolls"] - $b["rolls"];
     });
 
     saveLeaderboard($board);

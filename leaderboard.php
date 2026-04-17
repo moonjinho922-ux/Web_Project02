@@ -18,18 +18,20 @@ $board = loadLeaderboard();
             <tr>
                 <th>Rank</th>
                 <th>Username</th>
-                <th>Score</th>
+                <th>Rolls</th>
+                <th>Result</th>
             </tr>
 
             <?php if (empty($board)): ?>
-                <tr><td colspan="3">No scores yet</td></tr>
+                <tr><td colspan="4">No scores yet</td></tr>
             <?php else: ?>
                 <?php $rank = 1; ?>
                 <?php foreach ($board as $player): ?>
                     <tr>
                         <td><?php echo $rank++; ?></td>
                         <td><?php echo htmlspecialchars($player["username"]); ?></td>
-                        <td><?php echo $player["score"]; ?></td>
+                        <td><?php echo $player["rolls"]; ?></td>
+                        <td><?php echo $player["result"]; ?></td>
                     </tr>
                 <?php endforeach; ?>
             <?php endif; ?>
