@@ -1,4 +1,5 @@
 <?php
+// Session check to ensure user is logged in
 session_start();
 require_once "functions.php";
 
@@ -7,22 +8,12 @@ if (!isset($_SESSION["user"])) {
     exit();
 }
 
+// Handle game start request
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Initialize game using selected difficulty
     initGame($_POST["difficulty"]);
-    header("Location: game.php");
-    exit();
-}
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $_SESSION["difficulty"] = $_POST["difficulty"];
-
-    $_SESSION["p1"] = 0;
-    $_SESSION["p2"] = 0;
-    $_SESSION["turn"] = 1;
-    $_SESSION["winner"] = null;
-
-    $_SESSION["start_time"] = time();
-
+    // Redirect to main game board
     header("Location: game.php");
     exit();
 }
