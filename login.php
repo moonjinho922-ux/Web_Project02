@@ -1,4 +1,5 @@
 <?php
+// Session setup and login processing
 session_start();
 require_once 'functions.php';
 

@@ -1,4 +1,5 @@
 <?php
+// Session and leaderboard data loading
 session_start();
 require_once "functions.php";
 

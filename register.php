@@ -1,4 +1,5 @@
 <?php
+// Session setup and registration handling
 session_start();
 require_once 'functions.php';
 
@@ -9,6 +10,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = $_POST["password"];
     $confirm = $_POST["confirm_password"];
 
+    // Input validation
     if (empty($username)) {
         $error = "Username cannot be empty!";
     } elseif ($password !== $confirm) {

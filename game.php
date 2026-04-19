@@ -1,4 +1,5 @@
 <?php
+// Session setup and access control
 session_start();
 require_once "functions.php";
 
@@ -15,12 +16,13 @@ if (!isset($_SESSION["p1"])) {
 if (!isset($_SESSION["winner"])) {
     $_SESSION["winner"] = null;
 }
-
+// Load game configuration and events 
 $config = getBoardConfig($_SESSION["difficulty"]);
 $events = getEventCells();
 
 $dice = "-";
 
+// Helper function for snakes and ladders movement
 function applySnakesLadders($pos, $config) {
     if (isset($config["snakes"][$pos])) {
         return $config["snakes"][$pos];
@@ -31,6 +33,7 @@ function applySnakesLadders($pos, $config) {
     return $pos;
 }
 
+// Main game loop handling dice rolls, turns, and events
 if ($_SERVER["REQUEST_METHOD"] == "POST" && !$_SESSION["winner"]) {
     $dice = rand(1, 6);
     $_SESSION["rolls"]++;
@@ -66,7 +69,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !$_SESSION["winner"]) {
         }
     }
 
-    // Win check
+    // Win condition checks
     if ($_SESSION["p1"] >= 100 && !$_SESSION["winner"]) {
         $_SESSION["winner"] = "Player 1";
         addToLeaderboard($_SESSION["user"], $_SESSION["rolls"]);
